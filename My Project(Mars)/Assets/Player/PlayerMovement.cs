@@ -7,8 +7,10 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput _input;
     private Rigidbody2D _rigidbody;
 
-    public float JumpForce;
-    public float MoveSpeed;
+    [SerializeField]
+    private float JumpForce = 800f;
+    [SerializeField]
+    private float MoveSpeed = 15;
 
     private int _jumpCount = 0;
     private bool _isOnGround = true;
@@ -41,24 +43,28 @@ public class PlayerMovement : MonoBehaviour
             _jumpCount++;
         }
     }
-
+    public float JetPackUp;
     private void Move()
     {
         float movementAmount = MoveSpeed * Time.deltaTime;
         //Debug.Log(movementAmount);
         if (_canMove)
         {
-            float upPush = _input.MoveDirection * movementAmount;
+            float upPush = _input.MoveDirection * Time.deltaTime * 6;
             if (upPush < 0)
             {
                 upPush *= -1;
             }
+            //Debug.Log(upPush);
 
-
-            _rigidbody.transform.Translate(new Vector3(_input.MoveDirection * movementAmount, upPush, 0f));
-            Debug.Log(upPush);
-
-
+            if (_input.RightJetForce && _input.LeftJetForce)
+            {
+                _rigidbody.AddForce(new Vector2(0f, JetPackUp), ForceMode2D.Impulse);
+            }
+            else
+            {
+                _rigidbody.AddForce(new Vector2(_input.MoveDirection * movementAmount, upPush), ForceMode2D.Impulse);
+            }
         }
     }
 
