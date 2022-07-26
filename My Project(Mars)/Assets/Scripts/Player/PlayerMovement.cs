@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private float MaxAngle = 15f;
-
+    private float IncreaseAngle;
 
     public float JetPackUp;
     private void Move()
@@ -77,50 +77,16 @@ public class PlayerMovement : MonoBehaviour
                 _rigidbody.AddForce(new Vector2(_input.MoveDirection * movementAmount, upThrust), ForceMode2D.Impulse);
                 LimitSpeed();
                 //Debug.Log(_rigidbody.velocity.x);
-                // 기울이기
 
-                if (_input.LeftJetForce)
+                // 기울이기
+                if (IncreaseAngle <= MaxAngle && IncreaseAngle >= (MaxAngle * -1))
                 {
-                    // Mathf.LerpAngle
-                    if (IncreaseAngle <= MaxAngle)
-                    {
-                        StartCoroutine(AngleRoutine());
-                    }
-                    // else
-                    // {
-                    //     StopAllCoroutines();
-                    // }
+                    transform.rotation = Quaternion.Euler(0f, 0f, _input.MoveDirection * MaxAngle * -1);
                 }
-                if (_input.RightJetForce)
-                {
-                    // Mathf.LerpAngle
-                    if (IncreaseAngle >= (MaxAngle * -1))
-                    {
-                        StartCoroutine(AngleRoutine());
-                    }
-                    // else
-                    // {
-                    //     StopAllCoroutines();
-                    // }
-                }
+
             }
 
         }
-    }
-    private float IncreaseAngle;
-    private IEnumerator AngleRoutine()
-    {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, 0f, IncreaseAngle), 10000);
-        if (_input.LeftJetForce)
-        {
-            IncreaseAngle += 0.5f;
-
-        }
-        else if (_input.RightJetForce)
-        {
-            IncreaseAngle -= 0.5f;
-        }
-        yield return new WaitForSeconds(1);
     }
 
     public float maxVelocityX;
