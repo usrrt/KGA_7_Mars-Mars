@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
         if (_isOnGround != false && _jumpCount == 0)
         {
             Jump();
@@ -35,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
         Move();
     }
+    // Vector2 direction = new Vector2(Mathf.Cos(_angle * Mathf.Deg2Rad), Mathf.Sin(_angle * Mathf.Deg2Rad));
     private void Jump()
     {
         //Debug.Log($"y속도: {Vector2.right * Time.deltaTime * JumpForce}");
@@ -46,6 +49,9 @@ public class PlayerMovement : MonoBehaviour
             _jumpCount++;
         }
     }
+
+    [SerializeField]
+    private float MaxAngle = 15f;
 
 
     public float JetPackUp;
@@ -71,9 +77,50 @@ public class PlayerMovement : MonoBehaviour
                 _rigidbody.AddForce(new Vector2(_input.MoveDirection * movementAmount, upThrust), ForceMode2D.Impulse);
                 LimitSpeed();
                 //Debug.Log(_rigidbody.velocity.x);
+                // 기울이기
+
+                if (_input.LeftJetForce)
+                {
+                    // Mathf.LerpAngle
+                    if (IncreaseAngle <= MaxAngle)
+                    {
+                        StartCoroutine(AngleRoutine());
+                    }
+                    // else
+                    // {
+                    //     StopAllCoroutines();
+                    // }
+                }
+                if (_input.RightJetForce)
+                {
+                    // Mathf.LerpAngle
+                    if (IncreaseAngle >= (MaxAngle * -1))
+                    {
+                        StartCoroutine(AngleRoutine());
+                    }
+                    // else
+                    // {
+                    //     StopAllCoroutines();
+                    // }
+                }
             }
 
         }
+    }
+    private float IncreaseAngle;
+    private IEnumerator AngleRoutine()
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, 0f, IncreaseAngle), 10000);
+        if (_input.LeftJetForce)
+        {
+            IncreaseAngle += 0.5f;
+
+        }
+        else if (_input.RightJetForce)
+        {
+            IncreaseAngle -= 0.5f;
+        }
+        yield return new WaitForSeconds(1);
     }
 
     public float maxVelocityX;
