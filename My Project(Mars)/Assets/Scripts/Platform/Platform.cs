@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private bool _isStepped = false;
+    public GameObject[] _platform;
+
+    private void Awake()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        _isStepped = false;
     }
 }

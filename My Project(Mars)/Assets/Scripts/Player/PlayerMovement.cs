@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         float movementAmount = MoveSpeed * Time.deltaTime;
-        //Debug.Log(movementAmount);
+        //Debug.Log(_rigidbody.velocity.x);
         if (_canMove)
         {
             float upThrust = _input.MoveDirection * Time.deltaTime * 6;
