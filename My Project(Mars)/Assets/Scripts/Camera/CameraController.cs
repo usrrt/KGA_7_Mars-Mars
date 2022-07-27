@@ -34,12 +34,6 @@ public class CameraController : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        _trigger.IsCameraMove = false;
-
-    }
-
     private void Update()
     {
 
@@ -47,12 +41,12 @@ public class CameraController : MonoBehaviour
         {
             if (_mode == CameraMode.DefaultView)
             {
-                float xposMoveAmount = _player.transform.position.x + _delta.x;
-                //Debug.Log(xposMoveAmount);
+                float xPosMoveAmount = _player.transform.position.x + _delta.x;
+                //float yPosMoveAmount = _player.transform.position.y + _delta.y;
+                //Debug.Log(yPosMoveAmount);
 
-                transform.position = Vector3.Lerp(transform.position, new Vector3(xposMoveAmount, _delta.y, -10f), Time.deltaTime * _speed.CameraSpeed);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(xPosMoveAmount, _delta.y, -10f), Time.deltaTime * _speed.CameraSpeed);
             }
-
         }
 
     }

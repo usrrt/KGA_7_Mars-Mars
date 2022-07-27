@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         fallingSpeed = _rigidbody.velocity.y * -1;
-        Debug.Log($"속도{_rigidbody.velocity.magnitude}");
+        //Debug.Log($"속도{_rigidbody.velocity.magnitude}");
         if (_isOnGround != false && _jumpCount == 0)
         {
             Jump();
