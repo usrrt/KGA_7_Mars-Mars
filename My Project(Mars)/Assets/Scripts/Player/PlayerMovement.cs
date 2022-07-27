@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
 
     private static readonly float MIN_NOMAL_Y = Mathf.Sin(45f * Mathf.Deg2Rad);
 
+    public float fallingSpeed;
+    public float DieSpeed = 6f;
+
     private void Awake()
     {
         _input = GetComponent<PlayerInput>();
@@ -27,9 +30,15 @@ public class PlayerMovement : MonoBehaviour
         _state = GetComponent<PlayerState>();
     }
 
-    private void Update()
+    private void Start()
     {
 
+    }
+
+    private void Update()
+    {
+        fallingSpeed = _rigidbody.velocity.y * -1;
+        Debug.Log($"속도{_rigidbody.velocity.magnitude}");
         if (_isOnGround != false && _jumpCount == 0)
         {
             Jump();
@@ -113,9 +122,15 @@ public class PlayerMovement : MonoBehaviour
             _jumpCount = 0;
         }
 
-        Debug.Log($"{other.gameObject.tag}");
+        //Debug.Log($"{other.gameObject.tag}");
 
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.tag == "DeadZone")
+        {
+            _state.Die();
+        }
+
+        // 빠른속도로 추락하면 죽음
+        if (other.gameObject.tag == "Platform" && (fallingSpeed >= DieSpeed))
         {
             _state.Die();
         }

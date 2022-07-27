@@ -4,13 +4,16 @@ using UnityEngine;
 
 public enum CameraMode
 {
-    QuaterView,
+    DefaultView,
 
 }
 public class CameraController : MonoBehaviour
 {
-    CameraMode _mode = CameraMode.QuaterView;
+    CameraMode _mode = CameraMode.DefaultView;
     private CameraTrigger _trigger;
+    private CameraSpeedTrigger _speed;
+
+
 
     // 플레이어와 유지할 vector값
     [SerializeField]
@@ -19,38 +22,38 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private GameObject _player;
 
-    public float cameraSpeed;
-    public float xPos1;
-    public float xPos2;
+    //public float cameraSpeed;
+
+    public float CameraSize;
     //public bool isCameraAngleOut;
 
     private void Awake()
     {
         _trigger = GetComponentInChildren<CameraTrigger>();
+        _speed = GetComponentInChildren<CameraSpeedTrigger>();
+
     }
 
     private void Start()
     {
-        _trigger.isCameraAngleOut = false;
+        _trigger.IsCameraMove = false;
+
     }
 
     private void Update()
     {
-        if (_trigger.isCameraAngleOut)
-        {
-            if (_mode == CameraMode.QuaterView)
-            {
-                xPos1 = transform.position.x;
-                xPos2 = _player.transform.position.x;
-                float xposMoveAmount = _player.transform.position.x + _delta.x;
-                Debug.Log(xposMoveAmount);
 
-                transform.position = Vector3.Lerp(transform.position, new Vector3(xposMoveAmount, _delta.y, -10f), Time.deltaTime * cameraSpeed);
+        if (_trigger.IsCameraMove)
+        {
+            if (_mode == CameraMode.DefaultView)
+            {
+                float xposMoveAmount = _player.transform.position.x + _delta.x;
+                //Debug.Log(xposMoveAmount);
+
+                transform.position = Vector3.Lerp(transform.position, new Vector3(xposMoveAmount, _delta.y, -10f), Time.deltaTime * _speed.CameraSpeed);
             }
 
         }
-
-
 
     }
 

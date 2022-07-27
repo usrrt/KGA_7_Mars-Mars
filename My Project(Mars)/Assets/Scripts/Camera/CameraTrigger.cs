@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CameraTrigger : MonoBehaviour
 {
-    public bool isCameraAngleOut;
+    public bool IsCameraMove;
     // Start is called before the first frame update
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
-            isCameraAngleOut = true;
-            Debug.Log("exit");
+            IsCameraMove = true;
+            //Debug.Log("exit");
         }
 
     }
@@ -20,8 +20,8 @@ public class CameraTrigger : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            isCameraAngleOut = false;
-            Debug.Log("enter");
+            IsCameraMove = false;
+            //Debug.Log("enter");
         }
     }
 
