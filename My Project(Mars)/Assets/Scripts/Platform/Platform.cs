@@ -4,16 +4,26 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    private bool _isStepped = false;
-    public GameObject[] _platform;
+    public ParticleSystem ps;
 
-    private void Awake()
+    void CreatDust()
     {
-
+        ps.Play();
     }
 
-    private void OnEnable()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        _isStepped = false;
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            GameManager.Instance.LastCheckPointPos = transform.position;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            CreatDust();
+        }
     }
 }

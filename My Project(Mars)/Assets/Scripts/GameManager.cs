@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingleToneBehaviour<GameManager>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Vector2 LastCheckPointPos;
 
-    // Update is called once per frame
-    void Update()
+    public bool _isEnd = false; // 죽어버림
+
+    
+    private void Update()
     {
-        
+        if(_isEnd)
+        {
+            // 체크포인트장면으로 로드
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        }
     }
 }

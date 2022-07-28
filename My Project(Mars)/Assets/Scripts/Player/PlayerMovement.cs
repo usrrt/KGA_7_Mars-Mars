@@ -9,6 +9,10 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private PlayerState _state;
 
+    private Vector2 rePosY = new Vector2(0f, 2f);
+
+    
+
     [SerializeField]
     private float JumpForce = 800f;
     [SerializeField]
@@ -20,19 +24,26 @@ public class PlayerMovement : MonoBehaviour
 
     private static readonly float MIN_NOMAL_Y = Mathf.Sin(45f * Mathf.Deg2Rad);
 
+    // 충돌시 사망 속도
     public float fallingSpeed;
     public float DieSpeed = 6f;
+
+    // 이동시 분사효과
+    public ParticleSystem LeftJetEffect;
+    public ParticleSystem RightJetEffect;
 
     private void Awake()
     {
         _input = GetComponent<PlayerInput>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _state = GetComponent<PlayerState>();
+        
     }
 
     private void Start()
     {
-
+        // 플레이어 시작위치 게임매니저에있는 위치로 받아오기
+        transform.position = GameManager.Instance.LastCheckPointPos + rePosY;
     }
 
     private void Update()
@@ -52,7 +63,6 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log($"y속도: {Vector2.right * Time.deltaTime * JumpForce}");
         if (_input.CanJump)
         {
-
             _rigidbody.AddForce(Vector2.up * JumpForce, ForceMode2D.Force);
             _isOnGround = false;
             _jumpCount++;
@@ -80,12 +90,15 @@ public class PlayerMovement : MonoBehaviour
             if (_input.RightJetForce && _input.LeftJetForce)
             {
                 _rigidbody.AddForce(new Vector2(0f, JetPackUp), ForceMode2D.Impulse);
+                LeftJetEffect.Play();
             }
             else
             {
                 _rigidbody.AddForce(new Vector2(_input.MoveDirection * movementAmount, upThrust), ForceMode2D.Impulse);
                 LimitSpeed();
                 //Debug.Log(_rigidbody.velocity.x);
+
+                LeftJetEffect.Play();
 
                 // 기울이기
                 if (IncreaseAngle <= MaxAngle && IncreaseAngle >= (MaxAngle * -1))
