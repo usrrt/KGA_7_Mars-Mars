@@ -6,7 +6,7 @@ public class Platform : MonoBehaviour
 {
     public ParticleSystem Dust;
 
-    private FuelSystem _fuel;
+    
 
     private void OnCollisionExit(Collision collision)
     {
