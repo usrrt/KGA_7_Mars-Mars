@@ -6,6 +6,12 @@ public class PlayerMovement : MonoBehaviour
 {
     private PlayerController _controller;
     private Rigidbody _rigidbody;
+    private Animator _animator;
+    private FuelSystem _fuelSystem;
+
+    public GameObject Player;
+
+    
 
     // 이동시 더하는 힘
     [SerializeField]
@@ -14,8 +20,6 @@ public class PlayerMovement : MonoBehaviour
     private float MoveSpeed = 12;
     [SerializeField]
     private float Booster = 0.1f;
-
-    public float MaxVelocity;
 
     public bool _isOnGround = true;
     public int _jumpCount = 0;
@@ -26,12 +30,15 @@ public class PlayerMovement : MonoBehaviour
     {
         _controller = GetComponent<PlayerController>();
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = Player.GetComponent<Animator>();
+        _fuelSystem = GetComponent<FuelSystem>();
+      
     }
 
     private void Start()
     {
         // 저장된 위치를 시작위치로 한다.
-        transform.position = GameManager.Instance.LastCheckPoint + new Vector2(0f, 1f);
+        transform.position = GameManager.Instance.LastCheckPoint + new Vector2(0f, 1.3f);
     }
 
     private void Update()
@@ -52,8 +59,10 @@ public class PlayerMovement : MonoBehaviour
     {
         float movementAmount = MoveSpeed * Time.deltaTime;
 
-        if(_isOnGround == false)
+        // 공중에 있을때만 키입력 받게
+        if(_isOnGround == false && _fuelSystem.CanMove == true)
         {
+            
             float upThrust = _controller.MoveDirection * movementAmount / 2;
             if(upThrust < 0)
             {
@@ -63,25 +72,14 @@ public class PlayerMovement : MonoBehaviour
             if(_controller.BoostUp)
             {
                 _rigidbody.AddForce(_rigidbody.transform.up * Booster, ForceMode.Impulse);
+               
             }
             
             _rigidbody.AddForce(new Vector2(_controller.MoveDirection * movementAmount, upThrust), ForceMode.Impulse);
-             LimitSpeed();
+            // LimitSpeed();
             
         }
         
-    }
-
-    private void LimitSpeed()
-    {
-        if (_rigidbody.velocity.x > MaxVelocity)
-        {
-            _rigidbody.velocity = new Vector2(MaxVelocity, _rigidbody.velocity.y);
-        }
-        if (_rigidbody.velocity.x < (MaxVelocity * -1))
-        {
-            _rigidbody.velocity = new Vector2((MaxVelocity * -1), _rigidbody.velocity.y);
-        }
     }
 
     private void Jump()

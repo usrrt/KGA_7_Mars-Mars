@@ -9,7 +9,7 @@ public class GameManager : SingleToneBehaviour<GameManager>
 
     // Á×´Â Á¶°Ç
     public float fallingSpeed;
-    public float DieSpeed = 100f;
+    public float DieSpeed = 6f;
 
     public Vector2 LastCheckPoint;
 

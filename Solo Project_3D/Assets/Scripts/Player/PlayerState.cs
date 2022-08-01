@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour
 {
     private PlayerMovement _playerMovement;
+    private FuelSystem _fule;
 
     private static readonly float MIN_NOMAL_Y = Mathf.Sin(45f * Mathf.Deg2Rad);
 
@@ -12,6 +13,7 @@ public class PlayerState : MonoBehaviour
     {
         GameManager.Instance._isEnd = false;
         _playerMovement = GetComponent<PlayerMovement>();
+        _fule = GetComponent<FuelSystem>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -27,6 +29,12 @@ public class PlayerState : MonoBehaviour
         if((collision.gameObject.CompareTag("SafeZone") && (GameManager.Instance.fallingSpeed >= GameManager.Instance.DieSpeed)) || collision.gameObject.CompareTag("DeadZone"))
         {
             Die();
+        }
+
+        // ÇÃ·§Æû ¾ÈÂø½Ã ¿¬·áÃ¤¿ò
+        if(collision.gameObject.CompareTag("SafeZone"))
+        {
+            _fule.CurrentFuel = 100f;
         }
 
     }
