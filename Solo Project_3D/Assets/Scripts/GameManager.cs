@@ -40,8 +40,6 @@ public class GameManager : SingleToneBehaviour<GameManager>
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-
-        
     }
 
     private string KeyName = "BestScore";

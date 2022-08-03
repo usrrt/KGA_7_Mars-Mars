@@ -21,7 +21,7 @@ public class MeteoSpawner : MonoBehaviour
         while(true)
         {
             Meteorities obj = null;
-            int randTime = Random.Range(1, 11);
+            int randTime = Random.Range(1, 10);
             Debug.Log(randTime);
             if(randTime == 2)
             {
