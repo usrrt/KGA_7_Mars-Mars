@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GameManager : SingleToneBehaviour<GameManager>
 {
     public bool _isEnd;
+
+    public ScoreText ScoreUI;
 
     // 죽는 조건
     public float fallingSpeed;
@@ -13,6 +17,22 @@ public class GameManager : SingleToneBehaviour<GameManager>
 
     public Vector2 LastCheckPoint;
 
+    public int SavedScore;
+    public int ScoreIncreaseAmount = 1;
+
+    public event UnityAction<int> OnScoreChanged;
+
+    public int CurrentScore
+    {
+        get { return SavedScore; }
+
+        set 
+        { 
+            SavedScore = value;
+
+            OnScoreChanged?.Invoke(SavedScore);
+        }
+    }
 
     private void Update()
     {
@@ -20,11 +40,14 @@ public class GameManager : SingleToneBehaviour<GameManager>
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        
     }
 
-    // 코인 점수 더하는 함수
+    private string KeyName = "BestScore";
     public void AddScore()
     {
-        // 점수더해서 저장해놓기
+        CurrentScore += ScoreIncreaseAmount;
     }
+   
 }

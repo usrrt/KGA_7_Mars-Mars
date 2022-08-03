@@ -6,14 +6,17 @@ public class PlayerState : MonoBehaviour
 {
     private PlayerMovement _playerMovement;
     private FuelSystem _fule;
-
+    
     private static readonly float MIN_NOMAL_Y = Mathf.Sin(45f * Mathf.Deg2Rad);
+
+    public GameObject Astronaut;
+    public GameObject Explosion;
 
     private void Awake()
     {
         GameManager.Instance._isEnd = false;
         _playerMovement = GetComponent<PlayerMovement>();
-        _fule = GetComponent<FuelSystem>();
+        _fule = GetComponent<FuelSystem>();   
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -51,7 +54,17 @@ public class PlayerState : MonoBehaviour
 
     public void Die()
     {
+        Astronaut.SetActive(false);
+        GameObject particleObj = Instantiate(Explosion, transform.position, Quaternion.identity);
+        Destroy(particleObj, 2f);
+
+        Invoke("OnGameEnd", 0.8f);
+    }
+
+    public void OnGameEnd()
+    {
         GameManager.Instance._isEnd = true;
         Destroy(gameObject);
+
     }
 }

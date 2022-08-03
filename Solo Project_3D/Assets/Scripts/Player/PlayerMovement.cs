@@ -6,12 +6,11 @@ public class PlayerMovement : MonoBehaviour
 {
     private PlayerController _controller;
     private Rigidbody _rigidbody;
-    private Animator _animator;
+    
     private FuelSystem _fuelSystem;
+    
 
     public GameObject Player;
-
-    
 
     // 이동시 더하는 힘
     [SerializeField]
@@ -30,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _controller = GetComponent<PlayerController>();
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = Player.GetComponent<Animator>();
+        
         _fuelSystem = GetComponent<FuelSystem>();
       
     }
@@ -78,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
             _rigidbody.AddForce(new Vector2(_controller.MoveDirection * movementAmount, upThrust), ForceMode.Impulse);
             // LimitSpeed();
             
+            
         }
         
     }
@@ -86,9 +86,22 @@ public class PlayerMovement : MonoBehaviour
     {
         if(_controller.CanJump)
         {
+            
             _rigidbody.AddForce(_rigidbody.transform.up * JumpForce, ForceMode.Impulse);
             _isOnGround = false;
             _jumpCount++;
+        }
+    }
+
+    
+    // 점수관련
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Coin"))
+        {
+            other.gameObject.SetActive(false);
+
+            GameManager.Instance.AddScore();
         }
     }
 }
